@@ -1,0 +1,21 @@
+@host = https://localhost:7198
+@auditKey = 0999B05738047BD89D7281867151B6DF68FA78E466A3B48DD8A04E5CF8347670
+
+POST {{host}}/api/chat
+Content-Type: application/json
+
+{ "message": "Hello There" }
+
+###
+
+GET {{host}}/api/audit/verify
+X-Api-Key: {{auditKey}}
+
+###
+
+GET {{host}}/api/audit/recent
+X-Api-Key: {{auditKey}}
+
+###
+
+GET {{host}}/api/audit/verify
