@@ -8,7 +8,7 @@ namespace SentinelAPI.Services;
 
 public record ChainVerificationResult(bool Valid, long EntriesChecked, long? FirstBrokenEntryId, string? Reason);
 
-public class AuditLogService(SentinelDbContext db)
+public class AuditLogService(SentinelDbContext db, IConfiguration config)
 {
     private const string Genesis = "0000000000000000000000000000000000000000000000000000000000000000";
     private const long ChainLockKey = 727001;
@@ -66,6 +66,18 @@ public class AuditLogService(SentinelDbContext db)
 
     public static string Sha256Hex(string text) =>
         Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(text))).ToLowerInvariant();
+
+    public string Fingerprint(string text)
+    {
+        var secret = config["Audit:FingerprintKey"];
+        if (string.IsNullOrWhiteSpace(secret))
+            throw new InvalidOperationException("Audit:FingerprintKey is not configured.");
+
+        return Convert.ToHexString(
+            HMACSHA256.HashData(Encoding.UTF8.GetBytes(secret), Encoding.UTF8.GetBytes(text))
+        ).ToLowerInvariant();
+    }
+
 
     private static string ComputeHash(AuditLogEntry e) =>
         Sha256Hex(JsonSerializer.Serialize(new

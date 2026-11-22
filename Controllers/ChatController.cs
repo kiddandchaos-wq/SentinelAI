@@ -44,7 +44,7 @@ public class ChatController : ControllerBase
             categories = decision.Detected,
             violations = decision.Violations,
             decision = blocked ? "blocked" : "allowed",
-            messageSha256 = AuditLogService.Sha256Hex(message),
+            messageHmac = _audit.Fingerprint(message),
             messageLength = message.Length
         });
 
