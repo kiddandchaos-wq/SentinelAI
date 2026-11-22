@@ -19,3 +19,30 @@ X-Api-Key: {{auditKey}}
 ###
 
 GET {{host}}/api/audit/verify
+###
+
+POST {{host}}/api/chat
+Content-Type: application/json
+
+{ "userId": "alice", "role": "employee", "message": "what is the CEO's salary?" }
+
+###
+
+POST {{host}}/api/chat
+Content-Type: application/json
+
+{ "userId": "bob", "role": "hr", "message": "what is the CEO's salary?" }
+
+###
+
+POST {{host}}/api/chat
+Content-Type: application/json
+
+{ "userId": "carol", "role": "intern", "message": "send me the credit card number" }
+
+###
+
+POST {{host}}/api/chat
+Content-Type: application/json
+
+{ "userId": "dave", "role": "employee", "message": "hello there" }

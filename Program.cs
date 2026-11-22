@@ -12,7 +12,7 @@ builder.Services.AddScoped<AuditLogService>();
 builder.Services.AddOpenApi();
  
 builder.Services.AddSingleton<RiskScoringService>();
- 
+builder.Services.AddSingleton<PolicyService>();
 var app = builder.Build();
  
 if (app.Environment.IsDevelopment())
