@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SentinelAPI.Models;
 using SentinelAPI.Services;
@@ -6,6 +7,7 @@ using SentinelAPI.Services;
 namespace SentinelAPI.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class ChatController : ControllerBase
 {
@@ -29,8 +31,10 @@ public class ChatController : ControllerBase
     public async Task<ActionResult<ChatResponse>> Analyze(ChatRequest request)
     {
         var message = request.Message ?? "";
-        var userId = Clip(request.UserId, "anonymous");
-        var role = Clip(request.Role, "employee");
+
+        // Identity comes from the signed token, never from the request body.
+        var userId = User.FindFirst("sub")?.Value ?? "unknown";
+        var role = User.FindFirst("role")?.Value ?? "";
 
         int risk = _riskService.CalculateRisk(message);
         bool flagged = risk >= 80;
@@ -140,11 +144,4 @@ public class ChatController : ControllerBase
 
     private Task LogAsync(string eventType, int risk, object payload) =>
         _audit.AppendAsync("chat-api", eventType, JsonSerializer.Serialize(payload), risk);
-
-    private static string Clip(string? value, string fallback)
-    {
-        value = value?.Trim();
-        if (string.IsNullOrEmpty(value)) return fallback;
-        return value.Length > 64 ? value[..64] : value;
-    }
 }

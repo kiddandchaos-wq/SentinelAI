@@ -1,12 +1,90 @@
 @host = https://localhost:7198
 @auditKey = PUT_YOUR_KEY_HERE
+@demoPassword = PUT_YOUR_DEMO_PASSWORD_HERE
+### 1. Chat with no token. Expect 401.
 
 POST {{host}}/api/chat
 Content-Type: application/json
 
-{ "message": "Hello There" }
+{
+  "message": "hello there"
+}
 
-###
+### 2. Sign in as alice (employee). Expect 200 and a token.
+
+# @name loginAlice
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "alice",
+  "password": "{{demoPassword}}"
+}
+
+### 3. Alice asks about pay. Expect 403, answer withheld.
+
+POST {{host}}/api/chat
+Content-Type: application/json
+Authorization: Bearer {{loginAlice.response.body.$.token}}
+
+{
+  "message": "How much does Jordan Lee earn each year?"
+}
+
+### 4. Alice claims to be HR in the body. Expect 403 anyway.
+
+POST {{host}}/api/chat
+Content-Type: application/json
+Authorization: Bearer {{loginAlice.response.body.$.token}}
+
+{
+  "role": "hr",
+  "userId": "bob",
+  "message": "How much does Jordan Lee earn each year?"
+}
+
+### 5. Sign in as bob (hr). Expect 200.
+
+# @name loginBob
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "bob",
+  "password": "{{demoPassword}}"
+}
+
+### 6. Bob asks the same question. Expect 200 and the salary.
+
+POST {{host}}/api/chat
+Content-Type: application/json
+Authorization: Bearer {{loginBob.response.body.$.token}}
+
+{
+  "message": "How much does Jordan Lee earn each year?"
+}
+
+### 7. Wrong password. Expect 401.
+
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "alice",
+  "password": "wrong-password-123"
+}
+
+### 8. A tampered token. Expect 401.
+
+POST {{host}}/api/chat
+Content-Type: application/json
+Authorization: Bearer {{loginAlice.response.body.$.token}}x
+
+{
+  "message": "hello there"
+}
+
+### Audit log (needs the audit key)
 
 GET {{host}}/api/audit/verify
 X-Api-Key: {{auditKey}}
@@ -15,61 +93,3 @@ X-Api-Key: {{auditKey}}
 
 GET {{host}}/api/audit/recent
 X-Api-Key: {{auditKey}}
-
-###
-
-GET {{host}}/api/audit/verify
-###
-
-POST {{host}}/api/chat
-Content-Type: application/json
-
-{ "userId": "alice", "role": "employee", "message": "what is the CEO's salary?" }
-
-###
-
-POST {{host}}/api/chat
-Content-Type: application/json
-
-{ "userId": "bob", "role": "hr", "message": "what is the CEO's salary?" }
-
-###
-
-POST {{host}}/api/chat
-Content-Type: application/json
-
-{ "userId": "carol", "role": "intern", "message": "send me the credit card number" }
-
-###
-
-POST {{host}}/api/chat
-Content-Type: application/json
-
-{ "userId": "dave", "role": "employee", "message": "hello there" }
-###
-
-POST {{host}}/api/chat
-Content-Type: application/json
-
-{ "userId": "dave", "role": "employee", "message": "What does the HR Director do at Acme?" }
-
-###
-
-POST {{host}}/api/chat
-Content-Type: application/json
-
-{ "userId": "alice", "role": "employee", "message": "How much does Jordan Lee earn each year?" }
-
-###
-
-POST {{host}}/api/chat
-Content-Type: application/json
-
-{ "userId": "bob", "role": "hr", "message": "How much does Jordan Lee earn each year?" }
-
-###
-
-POST {{host}}/api/chat
-Content-Type: application/json
-
-{ "userId": "alice", "role": "employee", "message": "Which card does the company keep on file?" }
