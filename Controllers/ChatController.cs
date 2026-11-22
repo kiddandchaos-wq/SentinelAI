@@ -12,12 +12,17 @@ public class ChatController : ControllerBase
     private readonly RiskScoringService _riskService;
     private readonly PolicyService _policy;
     private readonly AuditLogService _audit;
+    private readonly IAiService _ai;
+    private readonly ILogger<ChatController> _logger;
 
-    public ChatController(RiskScoringService riskService, PolicyService policy, AuditLogService audit)
+    public ChatController(RiskScoringService riskService, PolicyService policy,
+        AuditLogService audit, IAiService ai, ILogger<ChatController> logger)
     {
         _riskService = riskService;
         _policy = policy;
         _audit = audit;
+        _ai = ai;
+        _logger = logger;
     }
 
     [HttpPost]
@@ -28,42 +33,113 @@ public class ChatController : ControllerBase
         var role = Clip(request.Role, "employee");
 
         int risk = _riskService.CalculateRisk(message);
-        var decision = _policy.Evaluate(message, role);
         bool flagged = risk >= 80;
-        bool blocked = !decision.Allowed;
+        var msgFingerprint = _audit.Fingerprint(message);
 
-        var eventType = blocked ? "message.blocked"
-                      : flagged ? "message.flagged"
-                      : "message.analyzed";
+        // 1. Check the question before the AI ever sees it.
+        var inbound = _policy.Evaluate(message, role);
+        if (!inbound.Allowed)
+        {
+            await LogAsync("message.blocked", risk, new
+            {
+                userId,
+                role,
+                stage = "request",
+                decision = "blocked",
+                categories = inbound.Detected,
+                violations = inbound.Violations,
+                messageHmac = msgFingerprint,
+                messageLength = message.Length
+            });
+            return StatusCode(StatusCodes.Status403Forbidden, new ChatResponse
+            {
+                Response = "Request blocked by policy.",
+                RiskScore = risk,
+                IsFlagged = flagged,
+                IsBlocked = true,
+                Violations = inbound.Violations
+            });
+        }
 
-        // Log who asked and what happened, but never the message itself.
-        var payload = JsonSerializer.Serialize(new
+        // 2. Ask the AI.
+        string reply;
+        try
+        {
+            reply = await _ai.AskAsync(message, HttpContext.RequestAborted);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "AI call failed");
+            await LogAsync("ai.error", risk, new
+            {
+                userId,
+                role,
+                stage = "ai",
+                decision = "error",
+                messageHmac = msgFingerprint,
+                messageLength = message.Length
+            });
+            return StatusCode(StatusCodes.Status502BadGateway, new ChatResponse
+            {
+                Response = "The assistant is unavailable right now.",
+                RiskScore = risk,
+                IsFlagged = flagged
+            });
+        }
+
+        // 3. Check the reply before the person sees it.
+        var outbound = _policy.EvaluateReply(reply, role);
+        if (!outbound.Allowed)
+        {
+            await LogAsync("reply.blocked", 100, new
+            {
+                userId,
+                role,
+                stage = "reply",
+                decision = "withheld",
+                categories = outbound.Detected,
+                violations = outbound.Violations,
+                messageHmac = msgFingerprint,
+                messageLength = message.Length,
+                replyHmac = _audit.Fingerprint(reply),
+                replyLength = reply.Length
+            });
+            return StatusCode(StatusCodes.Status403Forbidden, new ChatResponse
+            {
+                Response = "The answer was withheld because it contained information your role can't access.",
+                RiskScore = 100,
+                IsFlagged = true,
+                IsBlocked = true,
+                Violations = outbound.Violations
+            });
+        }
+
+        // 4. Allowed. Log it (never the text itself) and return the reply.
+        await LogAsync(flagged ? "message.flagged" : "message.analyzed", risk, new
         {
             userId,
             role,
-            categories = decision.Detected,
-            violations = decision.Violations,
-            decision = blocked ? "blocked" : "allowed",
-            messageHmac = _audit.Fingerprint(message),
-            messageLength = message.Length
+            stage = "reply",
+            decision = "allowed",
+            categories = outbound.Detected,
+            messageHmac = msgFingerprint,
+            messageLength = message.Length,
+            replyHmac = _audit.Fingerprint(reply),
+            replyLength = reply.Length
         });
 
-        await _audit.AppendAsync("chat-api", eventType, payload, risk);
-
-        var response = new ChatResponse
+        return Ok(new ChatResponse
         {
-            Response = blocked ? "Request blocked by policy." : "Message analyzed.",
+            Response = reply,
             RiskScore = risk,
             IsFlagged = flagged,
-            IsBlocked = blocked,
-            Violations = decision.Violations
-        };
-
-        if (blocked)
-            return StatusCode(StatusCodes.Status403Forbidden, response);
-
-        return Ok(response);
+            IsBlocked = false,
+            Violations = Array.Empty<string>()
+        });
     }
+
+    private Task LogAsync(string eventType, int risk, object payload) =>
+        _audit.AppendAsync("chat-api", eventType, JsonSerializer.Serialize(payload), risk);
 
     private static string Clip(string? value, string fallback)
     {

@@ -46,3 +46,30 @@ POST {{host}}/api/chat
 Content-Type: application/json
 
 { "userId": "dave", "role": "employee", "message": "hello there" }
+###
+
+POST {{host}}/api/chat
+Content-Type: application/json
+
+{ "userId": "dave", "role": "employee", "message": "What does the HR Director do at Acme?" }
+
+###
+
+POST {{host}}/api/chat
+Content-Type: application/json
+
+{ "userId": "alice", "role": "employee", "message": "How much does Jordan Lee earn each year?" }
+
+###
+
+POST {{host}}/api/chat
+Content-Type: application/json
+
+{ "userId": "bob", "role": "hr", "message": "How much does Jordan Lee earn each year?" }
+
+###
+
+POST {{host}}/api/chat
+Content-Type: application/json
+
+{ "userId": "alice", "role": "employee", "message": "Which card does the company keep on file?" }
