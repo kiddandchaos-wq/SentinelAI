@@ -1,32 +1,38 @@
 # SentinelAI
 
-SentinelAI is a security-focused ASP.NET Core application that demonstrates authentication, authorization, user administration, and tamper-evident audit logging.
+A security-focused administration and auditing platform built with ASP.NET Core and PostgreSQL.
+
+SentinelAI demonstrates modern authentication, role-based access control (RBAC), user administration, and tamper-evident audit logging through a web-based administration portal and audit dashboard.
+
+---
 
 ## Features
 
 ### Authentication
 
 - JWT-based authentication
-- Password hashing with secure storage
+- Secure password hashing
 - Login tracking
-- Account enable/disable controls
+- Account enable/disable support
 
 ### Authorization
 
 - Role-Based Access Control (RBAC)
-- Roles:
-  - employee
-  - hr
-  - finance
-  - it
-  - admin
+
+Supported roles:
+
+- employee
+- hr
+- finance
+- it
+- admin
 
 ### User Administration
 
 - View users
+- Enable user accounts
+- Disable user accounts
 - Change user roles
-- Enable accounts
-- Disable accounts
 - Track last login timestamps
 
 ### Audit System
@@ -40,80 +46,132 @@ SentinelAI is a security-focused ASP.NET Core application that demonstrates auth
 
 ### Admin Portal
 
-- Admin login
+- Secure administrator login
 - User management interface
 - Role editor
 - Account status management
 
+---
+
 ## Technology Stack
+
+### Backend
 
 - ASP.NET Core
 - C#
-- PostgreSQL
 - Entity Framework Core
+- PostgreSQL
+
+### Security
+
 - JWT Authentication
+- Role-Based Authorization
+- Password Hashing
+
+### Frontend
+
 - HTML
+- CSS
 - JavaScript
+
+---
 
 ## Project Structure
 
 ```text
-Controllers/
-Data/
-Models/
-Services/
-wwwroot/
- ├── dashboard.html
- └── admin.html
+SentinelAPI
+│
+├── Controllers
+├── Data
+├── Models
+├── Services
+├── Migrations
+├── Properties
+└── wwwroot
+    ├── admin.html
+    └── dashboard.html
 ```
+
+---
 
 ## Security Features
 
 - JWT token authentication
 - Role-based authorization
 - Password hashing
-- Account disable support
+- Account enable/disable support
+- Login activity tracking
 - Audit logging
-- Tamper detection
+- Tamper detection through chained audit records
 
-## Screenshots
+---
 
-### Admin Portal
+## Admin Portal
 
-Displays:
+The Admin Portal provides:
 
-- User accounts
-- Roles
-- Login history
-- Account status
-- Enable/Disable controls
+- Administrator login
+- User management
+- Role management
+- Enable/disable controls
+- Last login visibility
 
-### Audit Dashboard
+Accessible at:
 
-Displays:
+```text
+/admin.html
+```
 
-- Audit events
+---
+
+## Audit Dashboard
+
+The Audit Dashboard provides:
+
+- Audit event history
 - Verification status
 - Chain integrity checks
+- Administrative activity tracking
+
+Accessible at:
+
+```text
+/dashboard.html
+```
+
+---
 
 ## Running the Project
 
+### Prerequisites
+
+- .NET SDK
+- PostgreSQL
+- Visual Studio
+
+### Setup
+
 1. Clone the repository.
-2. Configure User Secrets.
-3. Create the PostgreSQL database.
+2. Create the PostgreSQL database.
+3. Configure ASP.NET User Secrets.
 4. Run Entity Framework migrations.
-5. Start the API.
-6. Open:
+5. Start the application.
+
+### Access
+
+Admin Portal:
+
+```text
+https://localhost:7198/admin.html
+```
+
+Audit Dashboard:
 
 ```text
 https://localhost:7198/dashboard.html
 ```
 
-or
-
-```text
-https://localhost:7198/admin.html
-```
+---
 
 ## Development Notes
 
@@ -124,19 +182,36 @@ Examples include:
 - JWT signing keys
 - Audit API keys
 - Demo passwords
+- Database credentials
+
+---
+
+## Future Enhancements
+
+- Session persistence
+- Logout functionality
+- Password reset workflows
+- Audit export capabilities
+- Azure deployment
+- Single Sign-On (SSO)
+- AI model integration
+
+---
 
 ## Version
 
-Current Version: v1.0
+**v1.0**
+
+---
 
 ## Author
 
 Built as a portfolio project demonstrating:
 
-- Backend development
-- Authentication
-- Authorization
-- Security engineering
-- Database design
-- Audit systems
-- Administrative interfaces
+- Backend Development
+- Authentication & Authorization
+- Security Engineering
+- Database Design
+- Audit Systems
+- Administrative Interfaces
+- ASP.NET Core Development
