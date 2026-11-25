@@ -1,8 +1,9 @@
 # SentinelAI
+> A security-focused administration and auditing platform demonstrating secure authentication, role-based authorization, user administration, and tamper-evident audit logging using ASP.NET Core and PostgreSQL.
 
 A security-focused administration and auditing platform built with ASP.NET Core and PostgreSQL.
 
-SentinelAI demonstrates modern authentication, role-based access control (RBAC), user administration, and tamper-evident audit logging through a web-based administration portal and audit dashboard.
+SentinelAI demonstrates modern authentication, role-based access control (RBAC), user administration, and tamper-evident audit logging through a secure web-based administration portal and audit dashboard.
 
 ---
 
@@ -12,27 +13,25 @@ SentinelAI demonstrates modern authentication, role-based access control (RBAC),
 
 - JWT-based authentication
 - Secure password hashing
-- Login tracking
+- Login activity tracking
 - Account enable/disable support
 
 ### Authorization
 
-- Role-Based Access Control (RBAC)
+Role-Based Access Control (RBAC) with support for:
 
-Supported roles:
-
-- employee
-- hr
-- finance
-- it
-- admin
+- Employee
+- HR
+- Finance
+- IT
+- Admin
 
 ### User Administration
 
 - View users
 - Enable user accounts
 - Disable user accounts
-- Change user roles
+- Modify user roles
 - Track last login timestamps
 
 ### Audit System
@@ -43,13 +42,37 @@ Supported roles:
 - Login success logging
 - Login failure logging
 - Administrative action logging
+- Chain integrity verification
 
-### Admin Portal
+### Administrator Portal
 
 - Secure administrator login
 - User management interface
-- Role editor
-- Account status management
+- Role management
+- Account status controls
+- Activity visibility
+
+---
+
+## Screenshots
+
+### Login Screen
+
+![Login Screen](screenshots/login-screen.png)
+
+Secure administrator authentication using JWT-based login and account validation.
+
+### Admin Portal
+
+![Admin Portal](screenshots/admin-portal.png)
+
+Administrative interface for managing users, assigning roles, enabling or disabling accounts, and monitoring user activity.
+
+### Audit Dashboard
+
+![Audit Dashboard](screenshots/audit-dashboard.png)
+
+Security audit dashboard displaying login events, administrative actions, chain verification status, and tamper-evident audit records.
 
 ---
 
@@ -65,8 +88,10 @@ Supported roles:
 ### Security
 
 - JWT Authentication
-- Role-Based Authorization
+- Role-Based Authorization (RBAC)
 - Password Hashing
+- Audit Logging
+- Tamper-Evident Records
 
 ### Frontend
 
@@ -85,7 +110,9 @@ SentinelAPI
 ├── Data
 ├── Models
 ├── Services
+├── Security
 ├── Migrations
+├── screenshots
 ├── Properties
 └── wwwroot
     ├── admin.html
@@ -96,27 +123,42 @@ SentinelAPI
 
 ## Security Features
 
+SentinelAI was designed to demonstrate practical security engineering concepts:
+
 - JWT token authentication
-- Role-based authorization
-- Password hashing
-- Account enable/disable support
+- Secure password hashing
+- Role-based access control
+- User account lifecycle management
 - Login activity tracking
-- Audit logging
-- Tamper detection through chained audit records
+- Administrative audit logging
+- Tamper-evident audit chains
+- Audit verification capabilities
+- Protection of sensitive configuration through ASP.NET User Secrets
+
+---
+
+## Security Principles Demonstrated
+
+- Principle of Least Privilege
+- Defense in Depth
+- Separation of Duties
+- Secure Secret Management
+- Authentication and Authorization Controls
+- Auditability and Accountability
 
 ---
 
 ## Admin Portal
 
-The Admin Portal provides:
+The Admin Portal provides administrators with the ability to:
 
-- Administrator login
-- User management
-- Role management
-- Enable/disable controls
-- Last login visibility
+- Manage users
+- Assign and change roles
+- Enable or disable accounts
+- Monitor user login activity
+- Perform administrative actions with full audit logging
 
-Accessible at:
+Access:
 
 ```text
 /admin.html
@@ -129,11 +171,12 @@ Accessible at:
 The Audit Dashboard provides:
 
 - Audit event history
-- Verification status
-- Chain integrity checks
-- Administrative activity tracking
+- Security activity visibility
+- Administrative event tracking
+- Audit chain verification
+- Integrity status monitoring
 
-Accessible at:
+Access:
 
 ```text
 /dashboard.html
@@ -152,20 +195,38 @@ Accessible at:
 ### Setup
 
 1. Clone the repository.
-2. Create the PostgreSQL database.
+
+```bash
+git clone <repository-url>
+```
+
+2. Create a PostgreSQL database.
+
 3. Configure ASP.NET User Secrets.
+
 4. Run Entity Framework migrations.
+
+```bash
+dotnet ef database update
+```
+
 5. Start the application.
 
-### Access
+```bash
+dotnet run
+```
 
-Admin Portal:
+---
+
+## Application Access
+
+### Admin Portal
 
 ```text
 https://localhost:7198/admin.html
 ```
 
-Audit Dashboard:
+### Audit Dashboard
 
 ```text
 https://localhost:7198/dashboard.html
@@ -175,14 +236,14 @@ https://localhost:7198/dashboard.html
 
 ## Development Notes
 
-Sensitive information is stored using ASP.NET User Secrets and is not committed to source control.
+Sensitive information is stored using ASP.NET User Secrets and is never committed to source control.
 
 Examples include:
 
 - JWT signing keys
 - Audit API keys
-- Demo passwords
 - Database credentials
+- Demo account passwords
 
 ---
 
@@ -194,24 +255,57 @@ Examples include:
 - Audit export capabilities
 - Azure deployment
 - Single Sign-On (SSO)
-- AI model integration
+- Multi-Factor Authentication (MFA)
+- Refresh token support
+- Docker deployment
+- AI-powered audit analysis
 
 ---
 
-## Version
+## License
 
-**v1.0**
+Copyright © 2026 Anthony Wade Ayres
+
+All Rights Reserved.
+
+SentinelAI is provided for portfolio, evaluation, and demonstration purposes only.
+
+No part of this software may be copied, modified, distributed, sublicensed, sold, or used for commercial purposes without prior written permission from the author.
+
+For commercial licensing, consulting, customization, or deployment inquiries, please contact the author.
+---
+
+## Commercial Licensing
+
+SentinelAI is available for demonstration, educational, and portfolio purposes.
+
+Organizations interested in commercial licensing, customization, consulting services, or enterprise deployment support may contact the author to discuss:
+
+- Commercial licensing
+- Custom feature development
+- Security enhancements
+- Cloud deployment services
+- Integration with existing systems
+- AI-powered compliance and audit capabilities
+
+For business inquiries, please contact:
+
+**Anthony Wade Ayres**
+
+Email: tonywade1812@gmail.com
 
 ---
 
-## Author
+## Enterprise Opportunities
 
-Built as a portfolio project demonstrating:
+SentinelAI provides a foundation for:
 
-- Backend Development
-- Authentication & Authorization
-- Security Engineering
-- Database Design
-- Audit Systems
-- Administrative Interfaces
-- ASP.NET Core Development
+- User Identity Management
+- Administrative Control Portals
+- Compliance Auditing
+- Security Event Monitoring
+- Internal Governance Systems
+- Role-Based Access Control (RBAC)
+- Audit Trail Verification
+
+Enterprise-specific functionality can be developed based on organizational requirements.
