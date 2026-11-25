@@ -236,15 +236,14 @@ https://localhost:7198/dashboard.html
 
 ## Development Notes
 
-Sensitive information is stored using ASP.NET User Secrets and is never committed to source control.
+Sensitive configuration values are intended to be stored using ASP.NET User Secrets or environment variables and should never be committed to source control.
 
-Examples include:
+Examples may include:
 
-- JWT signing keys
-- Audit API keys
-- Database credentials
-- Demo account passwords
-
+- Authentication signing keys
+- Database connection credentials
+- API secrets
+- Environment-specific configuration values
 ---
 
 ## Future Enhancements
