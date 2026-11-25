@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>SentinelAI Admin</title>
+
+    <style>
+        body {
+            font-family: Segoe UI, sans-serif;
+            margin: 40px;
+            background: #1e1e1e;
+            color: white;
+        }
+
+        h1 {
+            color: #4fc3f7;
+        }
+        #status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #444;
+            padding: 10px;
+        }
+
+        th {
+            background: #333;
+        }
+
+        button {
+            padding: 6px 10px;
+            cursor: pointer;
+        }
+    </style>
+    
+</head>
+<body>
+
+    <h1>SentinelAI User Administration</h1>
+
+    <div>
+        <h3>Admin Login</h3>
+
+        <input id="username"
+               placeholder="Username"
+               type="text" />
+
+        <input id="password"
+               placeholder="Password"
+               type="password" />
+
+        <button onclick="login()">
+            Login
+        </button>
+
+        <div id="status"></div>
+
+        <hr />
+
+        <button onclick="loadUsers()">
+            Load Users
+        </button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Active</th>
+                <th>Last Login</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody id="users">
+        </tbody>
+    </table>
+    <script>
+let token = "";
+
+async function login() {
+    const username =
+        document.getElementById("username").value;
+
+    const password =
+        document.getElementById("password").value;
+
+    const response = await fetch(
+        "/api/auth/login",
+        {
+            method: "POST",
+            headers:
+            {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(
+                {
+                    username: username,
+                    password: password
+                })
+        });
+
+    if (!response.ok) {
+        document.getElementById("status").innerText =
+            "❌ Login failed.";
+
+        return;
+    }
+
+    const data = await response.json();
+
+    token = data.token;
+
+    document.getElementById("status").innerText =
+        `✅ Logged in successfully as ${username}`;
+}
+async function loadUsers()
+{
+                   
+
+                    const response = await fetch(
+                        "/api/admin/users",
+                        {
+                            headers:
+                            {
+                                Authorization: `Bearer ${token}`
+                            }
+                        });
+
+                    const users = await response.json();
+
+                    const tbody =
+                        document.getElementById("users");
+
+                    tbody.innerHTML = "";
+
+                    users.forEach(u =>
+                    {
+                        tbody.innerHTML += `
+                        <tr>
+                            <td>${u.username}</td>
+
+                            <td>
+                                <select onchange="changeRole(${u.id}, this.value)">
+                                    <option value="employee" ${u.role === 'employee' ? 'selected' : ''}>employee</option>
+                                    <option value="hr" ${u.role === 'hr' ? 'selected' : ''}>hr</option>
+                                    <option value="finance" ${u.role === 'finance' ? 'selected' : ''}>finance</option>
+                                    <option value="it" ${u.role === 'it' ? 'selected' : ''}>it</option>
+                                    <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>admin</option>
+                                </select>
+                            </td>
+
+                            <td>${u.isActive}</td>
+
+                            <td>${u.lastLoginUtc ?? ""}</td>
+
+                            <td>
+                                <button onclick="disableUser(${u.id})">
+                                    Disable
+                                </button>
+
+                                <button onclick="enableUser(${u.id})">
+                                    Enable
+                                </button>
+                            </td>
+                        </tr>`;
+                    });
+}
+
+async function disableUser(id)
+{
+                    
+
+                    await fetch(
+                        `/api/admin/users/${id}/disable`,
+                        {
+                            method: "PUT",
+                            headers:
+                            {
+                                Authorization: `Bearer ${token}`
+                            }
+                        });
+
+                    loadUsers();
+}
+
+async function enableUser(id)
+{
+                    
+
+                    await fetch(
+                        `/api/admin/users/${id}/enable`,
+                        {
+                            method: "PUT",
+                            headers:
+                            {
+                                Authorization: `Bearer ${token}`
+                            }
+                        });
+
+                    loadUsers();
+}
+
+async function changeRole(id, role)
+{
+                    
+
+                    await fetch(
+                        `/api/admin/users/${id}/role`,
+                        {
+                            method: "PUT",
+                            headers:
+                            {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`
+                            },
+                            body: JSON.stringify(
+                            {
+                                role: role
+                            })
+                        });
+
+                    loadUsers();
+}
+
+    </script>
+
+</body>
+</html>

@@ -43,7 +43,7 @@ Authorization: Bearer {{loginAlice.response.body.$.token}}
   "message": "How much does Jordan Lee earn each year?"
 }
 
-### 5. Sign in as bob (hr). Expect 200.
+### 5. Sign in as bob (admin). Expect 200.
 
 # @name loginBob
 POST {{host}}/api/auth/login
@@ -93,3 +93,27 @@ X-Api-Key: {{auditKey}}
 
 GET {{host}}/api/audit/recent
 X-Api-Key: {{auditKey}}
+### 9. Admin gets user list.
+
+GET {{host}}/api/admin/users
+Authorization: Bearer {{loginBob.response.body.$.token}}
+
+### 10. Disable Alice.
+
+PUT {{host}}/api/admin/users/5/disable
+Authorization: Bearer {{loginBob.response.body.$.token}}
+
+### 11. Enable Alice.
+
+PUT {{host}}/api/admin/users/5/enable
+Authorization: Bearer {{loginBob.response.body.$.token}}
+
+### 12. Change Carol to admin.
+
+PUT {{host}}/api/admin/users/7/role
+Content-Type: application/json
+Authorization: Bearer {{loginBob.response.body.$.token}}
+
+{
+  "role": "admin"
+}

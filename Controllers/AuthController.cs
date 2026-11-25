@@ -25,7 +25,7 @@ public class AuthController(SentinelDbContext db, PasswordHasher hasher, TokenSe
         if (username.Length == 0 || username.Length > 64 || password.Length == 0 || password.Length > 128)
             return Unauthorized(new { error = "Invalid username or password." });
 
-        var user = await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Username == username);
+        var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
 
         bool ok;
         if (user is null)
@@ -49,6 +49,17 @@ public class AuthController(SentinelDbContext db, PasswordHasher hasher, TokenSe
             }), 40);
             return Unauthorized(new { error = "Invalid username or password." });
         }
+        if (!user!.IsActive)
+        {
+            return Unauthorized(new
+            {
+                error = "Account disabled."
+            });
+        }
+
+        user.LastLoginUtc = DateTime.UtcNow;
+
+        await db.SaveChangesAsync();
 
         var (token, expires) = tokens.Create(user!);
         await audit.AppendAsync("auth-api", "auth.login", JsonSerializer.Serialize(new
