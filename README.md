@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="sentinelai-logo.png" alt="SentinelAI Logo" width="400">
+</p>
+
 # SentinelAI
 > A security-focused administration, auditing, and AI governance platform built with ASP.NET Core and PostgreSQL.
 
