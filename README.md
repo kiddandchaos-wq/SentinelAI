@@ -14,7 +14,8 @@
   <img src="https://img.shields.io/badge/License-MIT-green" />
 </p>
 
-> A security-focused administration, auditing, and AI governance platform built with ASP.NET Core and PostgreSQL.
+> An AI governance, security auditing, and compliance platform built with ASP.NET Core and PostgreSQL.
+
 
 SentinelAI demonstrates secure authentication, role-based access control (RBAC), user administration, tamper-evident audit logging, and AI policy enforcement. The platform combines traditional security controls with AI risk analysis, response filtering, and auditability to help organizations govern AI-assisted workflows securely.
 
