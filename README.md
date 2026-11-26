@@ -2,7 +2,18 @@
   <img src="sentinelai-logo.png" alt="SentinelAI Logo" width="400">
 </p>
 
-# SentinelAI
+<h1 align="center">SentinelAI</h1>
+
+<p align="center">
+  AI Governance • Audit Logging • Compliance Monitoring • Security Administration
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/ASP.NET_Core-9.0-blue" />
+  <img src="https://img.shields.io/badge/PostgreSQL-Database-blue" />
+  <img src="https://img.shields.io/badge/License-MIT-green" />
+</p>
+
 > A security-focused administration, auditing, and AI governance platform built with ASP.NET Core and PostgreSQL.
 
 SentinelAI demonstrates secure authentication, role-based access control (RBAC), user administration, tamper-evident audit logging, and AI policy enforcement. The platform combines traditional security controls with AI risk analysis, response filtering, and auditability to help organizations govern AI-assisted workflows securely.
