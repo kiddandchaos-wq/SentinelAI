@@ -1,9 +1,7 @@
 # SentinelAI
-> A security-focused administration and auditing platform demonstrating secure authentication, role-based authorization, user administration, and tamper-evident audit logging using ASP.NET Core and PostgreSQL.
+> A security-focused administration, auditing, and AI governance platform built with ASP.NET Core and PostgreSQL.
 
-A security-focused administration and auditing platform built with ASP.NET Core and PostgreSQL.
-
-SentinelAI demonstrates modern authentication, role-based access control (RBAC), user administration, and tamper-evident audit logging through a secure web-based administration portal and audit dashboard.
+SentinelAI demonstrates secure authentication, role-based access control (RBAC), user administration, tamper-evident audit logging, and AI policy enforcement. The platform combines traditional security controls with AI risk analysis, response filtering, and auditability to help organizations govern AI-assisted workflows securely.
 
 ---
 
@@ -15,6 +13,7 @@ SentinelAI demonstrates modern authentication, role-based access control (RBAC),
 - Secure password hashing
 - Login activity tracking
 - Account enable/disable support
+- Role-Based Access Control (RBAC)
 
 ### Authorization
 
@@ -33,16 +32,27 @@ Role-Based Access Control (RBAC) with support for:
 - Disable user accounts
 - Modify user roles
 - Track last login timestamps
+- Administrative action auditing
 
-### Audit System
+### Audit & Compliance
 
-- Tamper-evident audit chain
-- Audit verification endpoint
-- Audit dashboard
-- Login success logging
-- Login failure logging
-- Administrative action logging
-- Chain integrity verification
+Tamper-evident audit chain
+Audit verification endpoint
+Audit dashboard
+Login success and failure logging
+Administrative action logging
+Chain integrity verification
+API key protected audit endpoints
+
+## AI Governance
+AI request risk scoring
+Policy-based prompt inspection
+AI response filtering
+Sensitive information protection
+Role-aware policy enforcement
+Security event logging
+Anthropic AI integration
+Mock AI testing mode
 
 ### Administrator Portal
 
@@ -51,6 +61,7 @@ Role-Based Access Control (RBAC) with support for:
 - Role management
 - Account status controls
 - Activity visibility
+- Activity monitoring dashboard
 
 ---
 
@@ -257,7 +268,7 @@ Examples may include:
 - Multi-Factor Authentication (MFA)
 - Refresh token support
 - Docker deployment
-- AI-powered audit analysis
+- Advanced AI-powered audit analytics
 
 ---
 
