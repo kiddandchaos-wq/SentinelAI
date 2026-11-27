@@ -1,64 +1,55 @@
 <img width="1254" height="1254" alt="image" src="https://github.com/user-attachments/assets/f33d52b7-192b-4517-8b9a-2d93d5d50464" />
 
+# Sentinel AI
 
-# SentinelAI
+**Intelligence for how organizations actually operate.**
 
-SentinelAI is an organizational intelligence and governance platform designed to help organizations manage knowledge, improve operational visibility, and prepare for AI-powered decision support.
+Sentinel AI is an organizational intelligence and governance platform that helps organizations capture, search, and protect institutional knowledge. Upload SOPs and policy documents as PDFs, and Sentinel AI extracts and chunks the text into a searchable repository, secured with JWT authentication, role-based access control, and a full audit trail.
+
+**Why it exists:** when experts leave or documents go stale, organizations lose knowledge without noticing. Sentinel AI is being built to surface that risk before it becomes a business problem.
+
+---
 
 ## Current Features
 
-### Security
+**Security**
+- JWT authentication
+- Password hashing
+- Role-based access control
+- Rate limiting
 
-- JWT Authentication
-- Password Hashing
-- Role-Based Access Control
-- Rate Limiting
+**Audit & Governance**
+- Audit logging
+- Risk scoring
+- Policy management
 
-### Audit & Governance
+**Knowledge Management**
+- Document upload and PDF ingestion
+- Document metadata storage and file path tracking
+- PDF text extraction and knowledge chunking
+- Searchable knowledge repository
 
-- Audit Logging
-- Risk Scoring
-- Policy Management
+**Knowledge Search**
+- Keyword search endpoint
+- Question retrieval endpoint
+- Document and chunk retrieval
 
-### Knowledge Management
-
-- Document Upload
-- PDF Ingestion
-- Document Metadata Storage
-- File Path Tracking
-
-### Knowledge Processing
-
-- PDF Text Extraction
-- Knowledge Chunking
-- Searchable Knowledge Repository
-
-### Knowledge Search
-
-- Search Endpoint
-- Question Endpoint
-- Document Retrieval
+---
 
 ## Technology Stack
 
-### Backend
+| Layer | Technology |
+|---|---|
+| Backend | ASP.NET Core, .NET 9 |
+| Data access | Entity Framework Core |
+| Database | PostgreSQL |
+| PDF processing | PdfPig |
 
-- ASP.NET Core
-- .NET 9
-- Entity Framework Core
-
-### Database
-
-- PostgreSQL
-
-### Knowledge Processing
-
-- PdfPig
-- Knowledge Chunking
+---
 
 ## Knowledge Pipeline
 
-```text
+```
 Upload Document
       ↓
 KnowledgeDocuments
@@ -72,80 +63,40 @@ Search
 Question Retrieval
 ```
 
-## Current API Endpoints
+---
 
-### Knowledge
+## API Endpoints
 
-```http
-GET /api/knowledge
-```
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/knowledge` | System status |
+| GET | `/api/knowledge/documents` | Returns stored documents |
+| GET | `/api/knowledge/chunks` | Returns extracted knowledge chunks |
+| GET | `/api/knowledge/search?q=` | Searches extracted document content |
+| GET | `/api/knowledge/ask?q=` | Question retrieval |
+| POST | `/api/knowledge/upload` | Uploads and processes a PDF |
 
-System status.
-
-```http
-GET /api/knowledge/documents
-```
-
-Returns stored documents.
-
-```http
-GET /api/knowledge/chunks
-```
-
-Returns extracted knowledge chunks.
-
-```http
-GET /api/knowledge/search?q=
-```
-
-Searches extracted document content.
-
-```http
-GET /api/knowledge/ask?q=
-```
-
-Question retrieval endpoint.
-
-```http
-POST /api/knowledge/upload
-```
-
-Uploads and processes PDF documents.
+---
 
 ## Roadmap
 
-### Sentinel Atlas
+Sentinel AI is designed as a modular platform. Start with one module and add more over time. The core services above (security, audit, and knowledge processing) are shared by every module.
 
-Knowledge and SOP Intelligence
+| Module | Focus | Planned features | Status |
+|---|---|---|---|
+| **Sentinel Atlas** | SOP and knowledge intelligence | Document ownership tracking, knowledge citations, confidence scoring, duplicate SOP detection, stale document detection | Next up |
+| **Sentinel Nexus** | Knowledge ownership intelligence | Expert mapping, knowledge concentration analysis, retirement risk detection | Planned |
+| **Sentinel Flow** | Operational friction analytics | Workflow bottleneck detection, process analytics, organizational health scoring | Planned |
 
-Planned Features:
-
-- Document Ownership Tracking
-- Knowledge Citations
-- Confidence Scoring
-- Duplicate SOP Detection
-- Stale Document Detection
-
-### Sentinel Nexus
-
-Knowledge Ownership Intelligence
-
-Planned Features:
-
-- Expert Mapping
-- Knowledge Concentration Analysis
-- Retirement Risk Detection
-
-### Sentinel Flow
-
-Operational Friction Analytics
-
-Planned Features:
-
-- Workflow Bottleneck Detection
-- Process Analytics
-- Organizational Health Scoring
+---
 
 ## Vision
 
-SentinelAI is evolving into an organizational intelligence platform that helps organizations identify knowledge loss, operational risk, process friction, and governance gaps before they become business problems.
+Sentinel AI is evolving into an operating platform that helps organizations see what others miss: which procedures are outdated, who holds critical knowledge, and where work slows down, before those gaps become business problems.
+
+---
+
+## Screenshots
+
+See the [`screenshots`](./screenshots) folder.
+
