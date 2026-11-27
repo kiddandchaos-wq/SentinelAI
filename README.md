@@ -1,3 +1,6 @@
+<img width="1254" height="1254" alt="image" src="https://github.com/user-attachments/assets/f33d52b7-192b-4517-8b9a-2d93d5d50464" />
+
+
 # SentinelAI
 
 SentinelAI is an organizational intelligence and governance platform designed to help organizations manage knowledge, improve operational visibility, and prepare for AI-powered decision support.
